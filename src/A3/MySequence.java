@@ -55,6 +55,9 @@ public class MySequence {
     public Element[] getElements(int threshold) {
         Element[] result = new Element[threshold];
         Node node = this.head;
+        if(node == null) {
+            return new Element[0];
+        }
         for(int i = 0; i < threshold; i++) {
             result[i] = node.getElement();
             node = node.next;
@@ -84,7 +87,7 @@ public class MySequence {
 
     public void add(Element element) {
         Node node = new Node(element);
-        if (this.head.next == null) {
+        if (this.head == null) {
             this.head.next = node;
             node.prev = this.head;
             node.next = this.tail;
@@ -98,7 +101,7 @@ public class MySequence {
     }
 
     public void sortedAdd(Element element) {
-        if (this.head.next == null) {
+        if (this.head == null) {
             this.head = new Node(element);
             return;
         }

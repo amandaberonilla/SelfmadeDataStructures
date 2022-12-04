@@ -10,18 +10,19 @@ public class MyHashMap {
 
     public MyHashMap(int threshold) {
         this.map = new MySequence[threshold];
+        for(int i = 0; i < this.map.length; i++) {
+            this.map[i] = new MySequence();
+        }
     }
 
     public void add(int key) {
-        int index = key / 10_000;
         Element element = new Element(key);
-        this.map[index].add(element);
+        this.add(element);
     }
 
     public void add(int key, String value) {
-        int index = key / 10_000;
         Element element = new Element(key, value);
-        this.map[index].add(element);
+        this.add(element);
     }
 
     public void add(Element element) {
