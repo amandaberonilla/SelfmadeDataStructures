@@ -1,4 +1,4 @@
-// Amanda Beronilla (40228871) & Abdurrahim Gigani (40181121)
+// Amanda Beronilla (40228871)
 // COMP 352 Data Structures and Algorithms sect FF
 // Dr. Aiman Hanna
 // 5 December 2022
@@ -6,10 +6,10 @@
 package A3;
 
 public class MyHashMap {
-    private MyLinkedList[] map;
+    private MySequence[] map;
 
-    public MyHashMap(int size) {
-        this.map = new MyLinkedList[size];
+    public MyHashMap(int threshold) {
+        this.map = new MySequence[threshold];
     }
 
     public void add(int key) {
@@ -45,7 +45,7 @@ public class MyHashMap {
         int index2 = Math.max(key1, key2) / 10_000;
         int parse = index2 - index1;
         for(int i = 0; i < parse; i++) {
-            MyLinkedList list = this.map[i];
+            MySequence list = this.map[i];
             result += list.rangeKey(Math.min(key1, key2), Math.max(key1, key2));
         }
         return result;

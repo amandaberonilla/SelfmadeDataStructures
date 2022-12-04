@@ -1,4 +1,4 @@
-// Amanda Beronilla (40228871) & Abdurrahim Gigani (40181121)
+// Amanda Beronilla (40228871)
 // COMP 352 Data Structures and Algorithms sect FF
 // Dr. Aiman Hanna
 // 5 December 2022

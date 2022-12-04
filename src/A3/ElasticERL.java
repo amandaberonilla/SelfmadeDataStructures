@@ -1,4 +1,4 @@
-// Amanda Beronilla (40228871) & Abdurrahim Gigani (40181121)
+// Amanda Beronilla (40228871)
 // COMP 352 Data Structures and Algorithms sect FF
 // Dr. Aiman Hanna
 // 5 December 2022
@@ -11,84 +11,56 @@ public class ElasticERL {
     private Object ADT;
     private int threshold;
     private int size;
-    // TO DO: FIX THE STACKS
-    private int[] stack;
-    private int[] sortedStack;
+    private MySequence stack;
+    private MySequence sortedStack;
+
 
     public ElasticERL() {
         this(0);
     }
 
+
     public ElasticERL(int size) {
         this.size = size;
         this.SetEINThreshold(size);
-        this.stack = new int[500_000];
-        this.sortedStack = new int[500_000];
     }
+
 
     public Object getADT() {
         return this.ADT;
     }
 
+
     public int getThreshold() {
         return this.threshold;
     }
+
 
     public int getSize() {
         return this.size;
     }
 
-    public int[] getStack() {
+
+    public MySequence getStack() {
         return this.stack;
     }
 
-    public int[] getSortedStack() {
+
+    public MySequence getSortedStack() {
         return this.sortedStack;
     }
 
+
     private void addToStacks(Element element) {
-        this.stack[this.size] = element.getKey();
-        boolean found = false;
-        int temp = -1;
-        for(int i = 0; i < this.size; i++) {
-            if(element.getKey() < this.sortedStack[i]) {
-                temp = this.sortedStack[i];
-                this.sortedStack[i] = element.getKey();
-                found = true;
-            }
-            if(found && i != this.size - 1) {
-                temp = this.sortedStack[i];
-                this.sortedStack[i] = this.sortedStack[i + 1];
-            }
-        }
+        this.stack.add(element);
+        this.sortedStack.sortedAdd(element);
         this.size++;
     }
 
+
     private void removeFromStacks(Element element) {
-        boolean found = false;
-        for(int i = 0; i < this.size; i++) {
-            if(element.getKey() == this.stack[i]) {
-                found = true;
-            }
-            if(found && i <= this.size - 2) {
-                this.stack[i] = this.stack[i + 1];
-            }
-            if(found && i == this.size - 1) {
-                this.stack[i] = 0;
-            }
-        }
-        found = false;
-        for(int i = 0; i < this.size; i++) {
-            if(element.getKey() == this.sortedStack[i]) {
-                found = true;
-            }
-            if(found && i <= this.size - 2) {
-                this.sortedStack[i] = this.sortedStack[i + 1];
-            }
-            if(found && i == this.size - 1) {
-                this.sortedStack[i] = 0;
-            }
-        }
+        this.stack.remove(element.getKey());
+        this.sortedStack.remove(element.getKey());
         this.size--;
     }
 
@@ -110,20 +82,16 @@ public class ElasticERL {
 //        If size is smaller, use a sequence
         if(this.threshold <= 1_000) {
             MySequence seq = new MySequence();
-            int[] newStack = new int[1_000];
-            // TO DO: SET ALL VALUES INTO SEQUENCE
-            // get list of stuff in chronological order
-            for(int i = 0; i < this.size; i++) {
-                seq.add(this.stack[i]);
+            for(Element element : this.stack.getElements(1_000)) {
+                seq.add(element);
             }
             this.ADT = seq;
         }
 //        If the size is larger, use a hashmap
         else {
             MyHashMap hash = new MyHashMap(10_000);
-            // TO DO: SET ALL VALUES INTO HASHMAP
-            for(int i = 0; i < this.size; i++) {
-                hash.add(this.stack[i]);
+            for(Element element : this.stack.getElements(10_000)) {
+                hash.add(element);
             }
             this.ADT = hash;
         }
@@ -144,8 +112,8 @@ public class ElasticERL {
         result = Integer.parseInt(generate);
 //        Checking if the key already exists
         // TO DO: CHECK IF KEY ALREADY EXISTS - use this.stack
-        for(int i = 0; i < this.size; i++) {
-            if(this.stack[i] == result) {
+        for(Element element : this.stack.getElements(this.threshold)) {
+            if(element.getKey() == result) {
                 return generate();
             }
         }
@@ -157,17 +125,17 @@ public class ElasticERL {
     public static int[] allKeys(ElasticERL erl) {
 //        Calling allKeys() from either Sequence or HashMap
 //        TO DO: CALL METHODS - or just return this.sortedStack?
-        if(erl.getThreshold() <= 1_000) {
-
-        }
-        else {
-
-        }
+//        sorted sequence like sequence the concept or sequence the data type?
+        return erl.sortedStack.getKeys(erl.threshold);
     }
-
 
 //    add(ElasticERL,key,value2): add an entry for the given key and value;
     public static void add(ElasticERL erl, int key, String value) {
+//        Checking if we cross the threshold
+        if(erl.size >= erl.threshold) {
+            System.out.println("Size surpasses threshold. Kindly resize.");
+            return;
+        }
 //        Setting variables
         Element element = new Element(key, value);
 //        Calling add() from either Sequence or HashMap
@@ -189,6 +157,11 @@ public class ElasticERL {
 
 //    remove(ElasticERL,key): remove the entry for the given key;
     public static void remove(ElasticERL erl, int key) {
+//        Checking if we cross 0
+        if(erl.size <= 0) {
+            System.out.println("Size too low. Kindly add before removing.");
+            return;
+        }
 //        Setting variables
         Element element = new Element(key);
 //        Calling remove() from either Sequence or HashMap
@@ -199,7 +172,7 @@ public class ElasticERL {
             if(erl.getThreshold() != 1_000) {
                 erl.SetEINThreshold(1_000);
             }
-            ((MySequence)erl.getADT()).remove(element);
+            ((MySequence)erl.getADT()).remove(key);
         }
         else {
             ((MyHashMap)erl.getADT()).remove(key);
@@ -215,10 +188,10 @@ public class ElasticERL {
 //        Calling getValues() from either Sequence or HashMap
 //        TO DO: CALL METHODS
         if(erl.getThreshold() <= 1_000) {
-            ((MySequence)erl.getADT()).
+            return ((MySequence)erl.getADT()).getValues(key);
         }
         else {
-            ((MyHashMap)erl.getADT()).getValues(key);
+            return ((MyHashMap)erl.getADT()).getValues(key);
         }
     }
 
@@ -228,12 +201,15 @@ public class ElasticERL {
     public static int nextKey(ElasticERL erl, int key) {
 //        Calling getValues() from either Sequence or HashMap
 //        TO DO: CALL METHODS - this.sortedStack?
-        if(erl.getThreshold() <= 1_000) {
-            ((MySequence)erl.getADT()).
+        int result = -1;
+        int[] keys = erl.sortedStack.getKeys(erl.threshold);
+        for(int i = 0; i < erl.threshold - 1; i++) {
+            if(keys[i] == key) {
+                result = keys[i + 1];
+                break;
+            }
         }
-        else {
-            ((MyHashMap)erl.getADT()).
-        }
+        return result;
     }
 
 
@@ -242,12 +218,15 @@ public class ElasticERL {
     public static int prevKey(ElasticERL erl, int key) {
 //        Calling getValues() from either Sequence or HashMap
 //        TO DO: CALL METHODS - this.sortedStack?
-        if(erl.getThreshold() <= 1_000) {
-            ((MySequence)erl.getADT()).
+        int result = -1;
+        int[] keys = erl.sortedStack.getKeys(erl.threshold);
+        for(int i = 1; i < erl.threshold; i++) {
+            if(keys[i] == key) {
+                result = keys[i - 1];
+                break;
+            }
         }
-        else {
-            ((MyHashMap)erl.getADT()).
-        }
+        return result;
     }
 
 
