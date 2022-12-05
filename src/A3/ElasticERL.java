@@ -46,6 +46,7 @@ public class ElasticERL {
 //    SetEINThreshold (Size): where 100 ≤ Size ≤ ~500,000 is an integer number that defines the size of the list. This size is very important as it will determine what data types or data structures will be used (i.e. a Tree, Hash Table, AVL tree, binary tree, sequence, etc.);
     public void SetEINThreshold(int threshold) {
 //        Setting attributes
+        Element[] elements;
         if(threshold > 500_000) {
             System.out.println("Argument passed is too large. Threshold set to 500 000.");
             this.threshold = 500_000;
@@ -61,8 +62,8 @@ public class ElasticERL {
         if(this.threshold <= 1_000) {
             this.ADTSize = 1_000;
             MySequence seq = new MySequence();
-            if(this.stack != null && this.stack.getElements(this.size).length != 0) {
-                for(Element element : this.stack.getElements(this.size)) {
+            if(this.stack != null && (elements = this.stack.getElements(this.size)).length != 0) {
+                for(Element element : elements) {
                     seq.add(element);
                 }
             }
@@ -72,8 +73,8 @@ public class ElasticERL {
         else {
             MyHashMap hash = new MyHashMap(10_000);
             this.ADTSize = 10_000;
-            if(this.stack != null && this.stack.getElements(this.size).length != 0) {
-                for(Element element : this.stack.getElements(this.size)) {
+            if(this.stack != null && (elements = this.stack.getElements(this.size)).length != 0) {
+                for(Element element : elements) {
                     hash.add(element);
                 }
             }
@@ -156,7 +157,6 @@ public class ElasticERL {
 //        Setting variables
         Element element = new Element(key);
 //        Calling remove() from either Sequence or HashMap
-//        TO DO: CALL METHODS
         if(this.size <= 1_001) {
 //            If the ADT size is not 1000, then we currently have a hashmap. When we remove an element, we cross the
 //            threshold bound, so we set the threshold and use a sequence to avoid this issue.
@@ -187,10 +187,10 @@ public class ElasticERL {
 //    nextKey(ElasticERL,key): return the key for the successor of key;
     public int nextKey(int key) {
         int result = -1;
-        if(this.sortedStack.getElements(this.threshold).length == 0) {
+        int[] keys = this.sortedStack.getKeys(this.threshold);
+        if(keys.length == 0) {
             return result;
         }
-        int[] keys = this.sortedStack.getKeys(this.threshold);
         for(int i = 0; i < this.threshold - 1; i++) {
             if(keys[i] == key) {
                 result = keys[i + 1];
@@ -205,10 +205,10 @@ public class ElasticERL {
 //    prevKey(ElasticERL,key): return the key for the predecessor of key;
     public int prevKey(int key) {
         int result = -1;
-        if(this.sortedStack.getElements(this.threshold).length == 0) {
+        int[] keys = this.sortedStack.getKeys(this.threshold);
+        if(keys.length == 0) {
             return result;
         }
-        int[] keys = this.sortedStack.getKeys(this.threshold);
         for(int i = 1; i < this.threshold; i++) {
             if(keys[i] == key) {
                 result = keys[i - 1];

@@ -6,22 +6,23 @@
 package A3;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Driver {
     public static void main(String[] args) {
-        System.out.println("Hello World!\n\n\n");
+        System.out.println("Welcome to Assignment 3\n");
+
+        BufferedReader read;
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the name of the text file (without .txt):");
 
         try {
-            String fileName = new String("A3/EHITS_test_file1.txt");
-//            File file = new File("C:\\Users\\Amanda\\Desktop\\monday\\codes\\comp352a3\\comp352_a3\\src\\A3\\EHITS_test_file1.txt");
-//            File file = new File("C:\\Users\\adtbe\\IdeaProjects\\comp352_a3\\src\\A3\\EHITS_test_file1.txt");
-//            File file = new File("C:\\Users\\adtbe\\IdeaProjects\\comp352_a3\\src\\A3\\test.txt");
-//            File file = new File("C:\\Users\\adtbe\\IdeaProjects\\comp352_a3\\src\\A3\\test2.txt");
-            File file = new File("C:\\Users\\adtbe\\IdeaProjects\\comp352_a3\\src\\A3\\test3.txt");
-            BufferedReader read = new BufferedReader(new FileReader(file));
+//            String fileName = "files/test2.txt";
+            String fileName = "files/" + scan.next() + ".txt";
+            read = new BufferedReader(new FileReader(fileName));
+
             int count = 0;
             String line;
 
@@ -33,7 +34,7 @@ public class Driver {
             int bound3 = 30000000;
             int bound4 = 90000000;
 
-            System.out.println("ElasticERL erl = new ElasticERL()");
+            System.out.println("\nElasticERL erl = new ElasticERL()");
             ElasticERL erl = new ElasticERL();
             System.out.println("erl.allKeys() = " + Arrays.toString(erl.allKeys()));
 
@@ -45,7 +46,7 @@ public class Driver {
             erl.SetEINThreshold(count);
             System.out.println("Hello");
 
-            read = new BufferedReader(new FileReader(file));
+            read = new BufferedReader(new FileReader(fileName));
             while((line = read.readLine()) != null) {
                 int key = Integer.parseInt(line);
                 erl.add(key, "");

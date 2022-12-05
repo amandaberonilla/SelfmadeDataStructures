@@ -99,12 +99,12 @@ public class MySequence {
     }
 
     public void remove(int key) {
-        if(this.head.next != null && this.head.next.element.getKey() == key) {
-            this.head = this.head.next;
+        Node node = this.head.next;
+        if(node != null && node.element.getKey() == key) {
+            this.head = node;
             this.head.prev = null;
             return;
         }
-        Node node = this.head.next;
         while(node != this.tail) {
             if(node.element.getKey() == key) {
                 node.prev.next = node.next;
