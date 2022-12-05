@@ -50,12 +50,11 @@ public class MySequence {
 
     public int[] getKeys(int threshold) {
         int[] result = new int[threshold];
-        Node node = this.head;
+        Node node = this.head.next;
         int i = 0;
-        if(node.next == null) {
+        if(node == null) {
             return new int[0];
         }
-        node = node.next;
         while(node != this.tail) {
             result[i] = node.element.getKey();
             node = node.next;
@@ -120,6 +119,9 @@ public class MySequence {
     public String getValues(int key) {
         String result = "Key not found.";
         Node node = this.head.next;
+        if(node == null) {
+            return result;
+        }
         while(node != this.tail) {
             if(node.element.getKey() == key) {
                 result = node.element.getValue();
@@ -133,8 +135,11 @@ public class MySequence {
     public int rangeKey(int key1, int key2) {
         int result = 0;
         Node node = this.head.next;
+        if(node == null) {
+            return result;
+        }
         while(node != this.tail) {
-            if(node.element.getKey() > key1 && node.element.getKey() < key2) {
+            if(node.element.getKey() >= key1 && node.element.getKey() <= key2) {
                 result++;
             }
             node = node.next;

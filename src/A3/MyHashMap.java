@@ -34,10 +34,11 @@ public class MyHashMap {
         int result = 0;
         int index1 = Math.min(key1, key2) / 10_000;
         int index2 = Math.max(key1, key2) / 10_000;
-        int parse = index2 - index1;
-        for(int i = 0; i < parse; i++) {
-            MySequence list = this.map[i];
-            result += list.rangeKey(Math.min(key1, key2), Math.max(key1, key2));
+        for(int i = index1; i <= index2; i++) {
+            if(i >= 10_000) {
+                return result;
+            }
+            result += this.map[i].rangeKey(Math.min(key1, key2), Math.max(key1, key2));
         }
         return result;
     }

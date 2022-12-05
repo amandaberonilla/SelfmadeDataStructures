@@ -95,7 +95,6 @@ public class ElasticERL {
         }
         result = Integer.parseInt(generate.toString());
 //        Checking if the key already exists
-        // TO DO: CHECK IF KEY ALREADY EXISTS - use this.stack
         if(this.stack != null && this.stack.getElements(this.size).length != 0) {
             for (Element element : this.stack.getElements(this.threshold)) {
                 if (element != null && element.getKey() == result) {
@@ -109,9 +108,6 @@ public class ElasticERL {
 
 //    allKeys(ElasticERL): return all keys in ElasticERL as a sorted sequence;
     public int[] allKeys() {
-//        Calling allKeys() from either Sequence or HashMap
-//        TO DO: CALL METHODS - or just return this.sortedStack?
-//        sorted sequence like sequence the concept or sequence the data type?
         if(this.sortedStack.getElements(this.threshold).length == 0) {
             return new int[0];
         }
@@ -134,7 +130,7 @@ public class ElasticERL {
             element = new Element(key, value);
         }
 //        Calling add() from either Sequence or HashMap
-        if(this.size < 1_000) {
+        if(this.threshold < 1_000) {
             ((MySequence)this.ADT).add(element);
         }
         else {
@@ -180,22 +176,16 @@ public class ElasticERL {
 
 //    getValues(ElasticERL,key): return the values of the given key;
     public String getValues(int key) {
-//        Calling getValues() from either Sequence or HashMap
-//        TO DO: CALL METHODS
         if(this.ADTSize == 1_000) {
             return ((MySequence)this.ADT).getValues(key);
         }
-        else {
-            return ((MyHashMap)this.ADT).getValues(key);
-        }
+        return ((MyHashMap)this.ADT).getValues(key);
     }
 
 
 
 //    nextKey(ElasticERL,key): return the key for the successor of key;
     public int nextKey(int key) {
-//        Calling getValues() from either Sequence or HashMap
-//        TO DO: CALL METHODS - this.sortedStack?
         int result = -1;
         if(this.sortedStack.getElements(this.threshold).length == 0) {
             return result;
@@ -214,8 +204,6 @@ public class ElasticERL {
 
 //    prevKey(ElasticERL,key): return the key for the predecessor of key;
     public int prevKey(int key) {
-//        Calling getValues() from either Sequence or HashMap
-//        TO DO: CALL METHODS - this.sortedStack?
         int result = -1;
         if(this.sortedStack.getElements(this.threshold).length == 0) {
             return result;
@@ -234,13 +222,9 @@ public class ElasticERL {
 
 //    rangeKey(key1, key2): returns the number of keys that are within the specified range of the two keys key1 and key2
     public int rangeKey(int key1, int key2) {
-//        Calling getValues() from either Sequence or HashMap
-//        TO DO: CALL METHODS
-        if(this.threshold <= 1_000) {
+        if(this.ADTSize == 1_000) {
             return ((MySequence)this.ADT).rangeKey(key1, key2);
         }
-        else {
-            return ((MyHashMap)this.ADT).rangeKey(key1, key2);
-        }
+        return ((MyHashMap)this.ADT).rangeKey(key1, key2);
     }
 }
