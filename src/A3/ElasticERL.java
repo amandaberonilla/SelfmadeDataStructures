@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class ElasticERL {
     private Object ADT;
+    private int ADTSize;
     private int threshold;
     private int size;
     private MySequence stack;
@@ -25,31 +26,6 @@ public class ElasticERL {
         this.SetEINThreshold(size);
         this.stack = new MySequence();
         this.sortedStack = new MySequence();
-    }
-
-
-    public Object getADT() {
-        return this.ADT;
-    }
-
-
-    public int getThreshold() {
-        return this.threshold;
-    }
-
-
-    public int getSize() {
-        return this.size;
-    }
-
-
-    public MySequence getStack() {
-        return this.stack;
-    }
-
-
-    public MySequence getSortedStack() {
-        return this.sortedStack;
     }
 
 
@@ -83,6 +59,7 @@ public class ElasticERL {
         }
 //        If size is smaller, use a sequence
         if(this.threshold <= 1_000) {
+            this.ADTSize = 1_000;
             MySequence seq = new MySequence();
             if(this.stack != null && this.stack.getElements(this.size).length != 0) {
                 for(Element element : this.stack.getElements(this.size)) {
@@ -94,6 +71,7 @@ public class ElasticERL {
 //        If the size is larger, use a hashmap
         else {
             MyHashMap hash = new MyHashMap(10_000);
+            this.ADTSize = 10_000;
             if(this.stack != null && this.stack.getElements(this.size).length != 0) {
                 for(Element element : this.stack.getElements(this.size)) {
                     hash.add(element);
@@ -120,7 +98,7 @@ public class ElasticERL {
         // TO DO: CHECK IF KEY ALREADY EXISTS - use this.stack
         if(this.stack != null && this.stack.getElements(this.size).length != 0) {
             for (Element element : this.stack.getElements(this.threshold)) {
-                if (element.getKey() == result) {
+                if (element != null && element.getKey() == result) {
                     return generate();
                 }
             }
@@ -156,13 +134,13 @@ public class ElasticERL {
             element = new Element(key, value);
         }
 //        Calling add() from either Sequence or HashMap
-        if(this.getSize() < 1_000) {
+        if(this.size < 1_000) {
             ((MySequence)this.ADT).add(element);
         }
         else {
-//            If the threshold is 1000, then we currently have a sequence. When we add an element, we cross the
+//            If the ADT size is 1000, then we currently have a sequence. When we add an element, we cross the
 //            threshold bound, so we set the threshold and use a hashmap to avoid this issue.
-            if(this.threshold == 1_000) {
+            if(this.ADTSize == 1_000) {
                 this.SetEINThreshold(1_001);
             }
             ((MyHashMap)this.ADT).add(element);
@@ -183,10 +161,10 @@ public class ElasticERL {
         Element element = new Element(key);
 //        Calling remove() from either Sequence or HashMap
 //        TO DO: CALL METHODS
-        if(this.getSize() <= 1_001) {
-//            If the threshold is not 1000, then we currently have a hashmap. When we remove an element, we cross the
+        if(this.size <= 1_001) {
+//            If the ADT size is not 1000, then we currently have a hashmap. When we remove an element, we cross the
 //            threshold bound, so we set the threshold and use a sequence to avoid this issue.
-            if(this.threshold != 1_000) {
+            if(this.ADTSize != 1_000) {
                 this.SetEINThreshold(1_000);
             }
             ((MySequence)this.ADT).remove(key);
@@ -204,7 +182,7 @@ public class ElasticERL {
     public String getValues(int key) {
 //        Calling getValues() from either Sequence or HashMap
 //        TO DO: CALL METHODS
-        if(this.threshold <= 1_000) {
+        if(this.ADTSize == 1_000) {
             return ((MySequence)this.ADT).getValues(key);
         }
         else {
@@ -219,7 +197,7 @@ public class ElasticERL {
 //        Calling getValues() from either Sequence or HashMap
 //        TO DO: CALL METHODS - this.sortedStack?
         int result = -1;
-        if(this.sortedStack.getElements(this.size).length != 0) {
+        if(this.sortedStack.getElements(this.threshold).length == 0) {
             return result;
         }
         int[] keys = this.sortedStack.getKeys(this.threshold);
@@ -239,7 +217,7 @@ public class ElasticERL {
 //        Calling getValues() from either Sequence or HashMap
 //        TO DO: CALL METHODS - this.sortedStack?
         int result = -1;
-        if(this.sortedStack.getElements(this.size).length != 0) {
+        if(this.sortedStack.getElements(this.threshold).length == 0) {
             return result;
         }
         int[] keys = this.sortedStack.getKeys(this.threshold);

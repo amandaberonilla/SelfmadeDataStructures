@@ -22,26 +22,6 @@ public class MySequence {
             this.prev = null;
             this.next = null;
         }
-
-        public Element getElement() {
-            return this.element;
-        }
-
-        public Node getPrev() {
-            return this.prev;
-        }
-
-        public Node getNext() {
-            return this.next;
-        }
-
-        public void setPrev(Node node) {
-            this.prev = node;
-        }
-
-        public void setNext(Node node) {
-            this.next = node;
-        }
     }
 
     private Node head;
@@ -55,12 +35,15 @@ public class MySequence {
     public Element[] getElements(int threshold) {
         Element[] result = new Element[threshold];
         Node node = this.head;
-        if(node == null) {
+        int i = 0;
+        if(node.next == null) {
             return new Element[0];
         }
-        for(int i = 0; i < threshold; i++) {
-            result[i] = node.getElement();
+        node = node.next;
+        while(node != this.tail) {
+            result[i] = node.element;
             node = node.next;
+            i++;
         }
         return result;
     }
@@ -68,26 +51,22 @@ public class MySequence {
     public int[] getKeys(int threshold) {
         int[] result = new int[threshold];
         Node node = this.head;
-        for(int i = 0; i < threshold; i++) {
-            result[i] = node.getElement().getKey();
+        int i = 0;
+        if(node.next == null) {
+            return new int[0];
+        }
+        node = node.next;
+        while(node != this.tail) {
+            result[i] = node.element.getKey();
             node = node.next;
+            i++;
         }
         return result;
     }
 
-    public void add(int key) {
-        Element element = new Element(key);
-        this.add(element);
-    }
-
-    public void add(int key, String value) {
-        Element element = new Element(key, value);
-        this.add(element);
-    }
-
     public void add(Element element) {
         Node node = new Node(element);
-        if (this.head == null) {
+        if (this.head.next == null) {
             this.head.next = node;
             node.prev = this.head;
             node.next = this.tail;
@@ -101,16 +80,12 @@ public class MySequence {
     }
 
     public void sortedAdd(Element element) {
-        if (this.head == null) {
-            this.head = new Node(element);
+        if (this.head.next == null) {
+            this.add(element);
             return;
         }
-        Node node = this.head;
-        while(node != null) {
-            if(node == this.tail) {
-                this.add(element);
-                return;
-            }
+        Node node = this.head.next;
+        while(node != this.tail) {
             if (element.getKey() < node.element.getKey()) {
                 Node newNode = new Node(element);
                 node.prev.next = newNode;
@@ -121,10 +96,11 @@ public class MySequence {
             }
             node = node.next;
         }
+        this.add(element);
     }
 
     public void remove(int key) {
-        if(this.head.element.getKey() == key) {
+        if(this.head.next != null && this.head.next.element.getKey() == key) {
             this.head = this.head.next;
             this.head.prev = null;
             return;
@@ -143,8 +119,8 @@ public class MySequence {
 
     public String getValues(int key) {
         String result = "Key not found.";
-        Node node = this.head;
-        while(node != null) {
+        Node node = this.head.next;
+        while(node != this.tail) {
             if(node.element.getKey() == key) {
                 result = node.element.getValue();
                 break;
@@ -156,8 +132,8 @@ public class MySequence {
 
     public int rangeKey(int key1, int key2) {
         int result = 0;
-        Node node = this.head;
-        while(node.next != null) {
+        Node node = this.head.next;
+        while(node != this.tail) {
             if(node.element.getKey() > key1 && node.element.getKey() < key2) {
                 result++;
             }

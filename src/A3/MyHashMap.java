@@ -15,16 +15,6 @@ public class MyHashMap {
         }
     }
 
-    public void add(int key) {
-        Element element = new Element(key);
-        this.add(element);
-    }
-
-    public void add(int key, String value) {
-        Element element = new Element(key, value);
-        this.add(element);
-    }
-
     public void add(Element element) {
         int index = element.getKey() / 10_000;
         this.map[index].add(element);
