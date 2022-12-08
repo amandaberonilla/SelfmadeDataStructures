@@ -19,16 +19,15 @@ public class Driver {
         System.out.println("Enter the name of the text file (without .txt):");
 
         try {
-//            String fileName = "files/test2.txt";
             String fileName = "files/" + scan.next() + ".txt";
             read = new BufferedReader(new FileReader(fileName));
 
             int count = 0;
             String line;
 
-            int test1 = 65862;
-            int test2 = 71421784;
-            int test3 = 65135867;
+            int test1 = 89105565;
+            int test2 = 97155562;
+            int test3 = 98422726;
             int bound1 = 0;
             int bound2 = 35000;
             int bound3 = 30000000;
